@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Make Payment - {{ student.first_name }} {{ student.last_name }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2>Make Payment</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Payment Details</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Student</label>
+                        <input type="text" class="form-control" value="{{ student.first_name }} {{ student.last_name }} ({{ student.student_id }})" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="fee" class="form-label">Fee Type</label>
+                        <select name="fee" id="fee" class="form-select" required>
+                            <option value="">Select Fee</option>
+                            {% for fee in pending_fees %}
+                            <option value="{{ fee.id }}" data-amount="{{ fee.amount }}">
+                                {{ fee.name }} - ${{ fee.amount }} ({{ fee.academic_year }} {{ fee.semester }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="amount_paid" class="form-label">Amount</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="amount_paid" name="amount_paid" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="payment_method" class="form-label">Payment Method</label>
+                        <select name="payment_method" id="payment_method" class="form-select" required>
+                            <option value="">Select Payment Method</option>
+                            {% for value, label in payment_methods %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes (Optional)</label>
+                        <textarea name="notes" id="notes" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Process Payment</button>
+                        <a href="{% url 'students:student_detail' student.student_id %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.getElementById('fee').addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    const amount = selectedOption.getAttribute('data-amount');
+    document.getElementById('amount_paid').value = amount || '';
+});
+</script>
+{% endblock %}
+{% endblock %}

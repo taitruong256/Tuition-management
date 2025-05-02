@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+migrations 
+
+# Django database 
+*.sqlite3 
+
+# Virtual Environment
+venv/
+
+# IDE
+.vscode/
