@@ -1,69 +1,96 @@
 {% extends 'base.html' %}
 
-{% block title %}Make Payment - {{ student.first_name }} {{ student.last_name }}{% endblock %}
+{% block title %}
+    {% if student %}
+        Tạo phiếu thu - {{ student.first_name }} {{ student.last_name }}
+    {% else %}
+        Tạo phiếu thu mới
+    {% endif %}
+{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col">
-        <h2>Make Payment</h2>
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="text-primary">{% if student %}Tạo phiếu thu cho {{ student.first_name }} {{ student.last_name }}{% else %}Tạo phiếu thu mới{% endif %}</h2>
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Payment Details</h5>
-            </div>
-            <div class="card-body">
-                <form method="post">
-                    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Thông tin thanh toán</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
                     
-                    <div class="mb-3">
-                        <label class="form-label">Student</label>
-                        <input type="text" class="form-control" value="{{ student.first_name }} {{ student.last_name }} ({{ student.student_id }})" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="fee" class="form-label">Fee Type</label>
-                        <select name="fee" id="fee" class="form-select" required>
-                            <option value="">Select Fee</option>
-                            {% for fee in pending_fees %}
-                            <option value="{{ fee.id }}" data-amount="{{ fee.amount }}">
-                                {{ fee.name }} - ${{ fee.amount }} ({{ fee.academic_year }} {{ fee.semester }})
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="amount_paid" class="form-label">Amount</label>
-                        <div class="input-group">
-                            <span class="input-group-text">$</span>
-                            <input type="number" class="form-control" id="amount_paid" name="amount_paid" step="0.01" required>
+                        {% if not student %}
+                        <div class="mb-3">
+                            <label for="student" class="form-label">Sinh viên</label>
+                            <select name="student" id="student" class="form-select" required>
+                                <option value="">Chọn sinh viên...</option>
+                                {% for s in students %}
+                                    <option value="{{ s.student_id }}">{{ s.student_id }} - {{ s.first_name }} {{ s.last_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn sinh viên
+                            </div>
                         </div>
-                    </div>
+                        {% endif %}
 
-                    <div class="mb-3">
-                        <label for="payment_method" class="form-label">Payment Method</label>
-                        <select name="payment_method" id="payment_method" class="form-select" required>
-                            <option value="">Select Payment Method</option>
-                            {% for value, label in payment_methods %}
-                            <option value="{{ value }}">{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                        <div class="mb-3">
+                            <label for="fee" class="form-label">Loại phí</label>
+                            <select name="fee" id="fee" class="form-select" required>
+                                <option value="">Chọn loại phí...</option>
+                                {% for fee in fees %}
+                                    <option value="{{ fee.id }}" data-amount="{{ fee.amount }}">
+                                        {{ fee.name }} - {{ fee.academic_year }} ({{ fee.semester }}) - {{ fee.amount }}đ
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn loại phí
+                            </div>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="notes" class="form-label">Notes (Optional)</label>
-                        <textarea name="notes" id="notes" class="form-control" rows="3"></textarea>
-                    </div>
+                        <div class="mb-3">
+                            <label for="amount_paid" class="form-label">Số tiền thanh toán</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="amount_paid" name="amount_paid" required min="0">
+                                <span class="input-group-text">đ</span>
+                            </div>
+                            <div class="invalid-feedback">
+                                Vui lòng nhập số tiền hợp lệ
+                            </div>
+                        </div>
 
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary">Process Payment</button>
-                        <a href="{% url 'students:student_detail' student.student_id %}" class="btn btn-secondary">Cancel</a>
-                    </div>
-                </form>
+                        <div class="mb-3">
+                            <label for="payment_method" class="form-label">Phương thức thanh toán</label>
+                            <select name="payment_method" id="payment_method" class="form-select" required>
+                                <option value="">Chọn phương thức thanh toán...</option>
+                                <option value="CASH">Tiền mặt</option>
+                                <option value="BANK_TRANSFER">Chuyển khoản</option>
+                                <option value="CREDIT_CARD">Thẻ tín dụng</option>
+                                <option value="OTHER">Khác</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Vui lòng chọn phương thức thanh toán
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>Xác nhận thanh toán
+                            </button>
+                            <a href="{% url 'payments:payment_list' %}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Hủy
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -71,10 +98,29 @@
 
 {% block extra_js %}
 <script>
-document.getElementById('fee').addEventListener('change', function() {
-    const selectedOption = this.options[this.selectedIndex];
-    const amount = selectedOption.getAttribute('data-amount');
-    document.getElementById('amount_paid').value = amount || '';
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-fill amount when fee is selected
+    const feeSelect = document.getElementById('fee');
+    const amountInput = document.getElementById('amount_paid');
+    
+    feeSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        if (selectedOption.value) {
+            amountInput.value = selectedOption.dataset.amount;
+        } else {
+            amountInput.value = '';
+        }
+    });
+
+    // Form validation
+    const form = document.querySelector('.needs-validation');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
 });
 </script>
 {% endblock %}

@@ -1,54 +1,167 @@
 {% extends 'base.html' %}
 
-{% block title %}Payments List - Tuition Management{% endblock %}
+{% block title %}Danh sách thanh toán - Quản lý học phí{% endblock %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col">
-        <h2>Payments</h2>
-    </div>
-</div>
-
-<div class="card">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Student</th>
-                        <th>Fee Type</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for payment in payments %}
-                    <tr>
-                        <td>{{ payment.payment_date|date:"M d, Y" }}</td>
-                        <td>
-                            <a href="{% url 'students:student_detail' payment.student.student_id %}">
-                                {{ payment.student.first_name }} {{ payment.student.last_name }}
-                            </a>
-                        </td>
-                        <td>{{ payment.fee.name }}</td>
-                        <td>${{ payment.amount_paid }}</td>
-                        <td>
-                            <span class="badge bg-{{ payment.status|lower }}">{{ payment.status }}</span>
-                        </td>
-                        <td>
-                            <a href="{% url 'payments:payment_detail' payment.receipt_number %}" class="btn btn-info btn-sm">View Receipt</a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6" class="text-center">No payments recorded yet.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<div class="container mt-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">Quản lý thanh toán học phí</h2>
+        <div>            <a href="{% url 'payments:make_payment' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Tạo phiếu thu mới
+            </a>
         </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Đã thanh toán</h6>
+                    <h3 class="card-text">{{ total_paid_amount|default:"0" }}đ</h3>
+                    <small>{{ paid_count|default:"0" }} giao dịch</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <h6 class="card-title">Đang chờ thanh toán</h6>
+                    <h3 class="card-text">{{ total_pending_amount|default:"0" }}đ</h3>
+                    <small>{{ pending_count|default:"0" }} giao dịch</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Quá hạn</h6>
+                    <h3 class="card-text">{{ total_overdue_amount|default:"0" }}đ</h3>
+                    <small>{{ overdue_count|default:"0" }} giao dịch</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Tổng giao dịch</h6>
+                    <h3 class="card-text">{{ total_amount|default:"0" }}đ</h3>
+                    <small>{{ total_count|default:"0" }} giao dịch</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Tình trạng</label>
+                    <select name="status" class="form-select">
+                        <option value="">Tất cả</option>
+                        {% for status, label in payment_status_choices %}
+                        <option value="{{ status }}" {% if selected_status == status %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">MSSV</label>
+                    <input type="text" name="student_id" class="form-control" value="{{ student_id }}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Loại phí</label>
+                    <select name="fee_type" class="form-select">
+                        <option value="">Tất cả</option>
+                        {% for fee in fee_types %}
+                        <option value="{{ fee.id }}" {% if selected_fee == fee.id %}selected{% endif %}>
+                            {{ fee.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary d-block w-100">Lọc</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payments Table -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Ngày thanh toán</th>
+                            <th>MSSV</th>
+                            <th>Họ tên</th>
+                            <th>Loại phí</th>
+                            <th>Số tiền</th>
+                            <th>Phương thức</th>
+                            <th>Tình trạng</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in payments %}
+                        <tr>
+                            <td>{{ payment.payment_date|date:"d/m/Y H:i" }}</td>
+                            <td>{{ payment.student.student_id }}</td>
+                            <td>
+                                <a href="{% url 'students:student_detail' payment.student.student_id %}" class="text-decoration-none">
+                                    {{ payment.student.full_name }}
+                                </a>
+                            </td>
+                            <td>{{ payment.fee.name }}</td>
+                            <td class="text-end">{{ payment.amount_paid|floatformat:0 }}đ</td>
+                            <td>{{ payment.get_payment_method_display }}</td>
+                            <td>
+                                {% if payment.status == 'PAID' %}
+                                    <span class="badge bg-success">Đã thanh toán</span>
+                                {% elif payment.status == 'PENDING' %}
+                                    <span class="badge bg-warning text-dark">Chờ thanh toán</span>
+                                {% elif payment.status == 'OVERDUE' %}
+                                    <span class="badge bg-danger">Quá hạn</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Đã hủy</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'payments:payment_detail' payment.receipt_number %}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    {% if payment.status == 'PENDING' %}
+                                    <a href="{% url 'payments:process_payment' payment.id %}" 
+                                       class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-check2"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                    Chưa có giao dịch nào được ghi nhận
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     </div>
 </div>
 {% endblock %}

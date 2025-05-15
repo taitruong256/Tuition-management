@@ -156,6 +156,8 @@
 <script>
 $(document).ready(function() {
     let totalCredits = 0;
+    const maxCredits = 24;
+    const registeredCredits = {{ total_registered_credits|default:0 }};
 
     // Cập nhật tổng số tín chỉ khi chọn/bỏ chọn môn học
     $('.course-checkbox').change(function() {
@@ -167,9 +169,10 @@ $(document).ready(function() {
         }
         $('#total-credits').text(totalCredits);
         
-        // Hiển thị cảnh báo nếu tổng số tín chỉ vượt quá 24
-        if (totalCredits > 24) {
-            alert('Cảnh báo: Tổng số tín chỉ không được vượt quá 24!');
+        // Hiển thị cảnh báo nếu tổng số tín chỉ vượt quá giới hạn
+        const totalWithRegistered = totalCredits + registeredCredits;
+        if (totalWithRegistered > maxCredits) {
+            alert(`Cảnh báo: Tổng số tín chỉ (${totalWithRegistered}) không được vượt quá ${maxCredits}!`);
         }
     });
 
@@ -185,10 +188,9 @@ $(document).ready(function() {
         if (selectedCourses.length === 0) {
             alert('Vui lòng chọn ít nhất một môn học!');
             return;
-        }
-
-        if (totalCredits > 24) {
-            alert('Không thể đăng ký! Tổng số tín chỉ vượt quá 24.');
+        }        const totalWithRegistered = totalCredits + registeredCredits;
+        if (totalWithRegistered > maxCredits) {
+            alert(`Không thể đăng ký! Tổng số tín chỉ (${totalWithRegistered}) vượt quá ${maxCredits}.`);
             return;
         }
 
