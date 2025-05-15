@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('students/', include('students.urls')),
     path('payments/', include('payments.urls')),
+    path('courses/', include('courses.urls')),
     path('', RedirectView.as_view(url='students/', permanent=True)),
 ]

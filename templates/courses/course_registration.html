@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center text-primary mb-4">ĐĂNG KÝ HỌC PHẦN</h2>
+    
+    {% if student %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>MSSV:</strong> {{ student.student_id }}</p>
+                    <p><strong>Họ tên:</strong> {{ student.full_name }}</p>
+                    <p><strong>Lớp:</strong> {{ student.class_name }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Ngành:</strong> {{ student.major }}</p>
+                    <p><strong>Khóa học:</strong> {{ student.academic_year }}</p>
+                    <p><strong>Số tín chỉ đã đăng ký:</strong> <span class="text-primary">{{ total_registered_credits }}</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+      <div class="registration-header">
+        <div class="row align-items-center">
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Đợt đăng ký</label>
+                    <select class="form-select">
+                        <option selected>{{ current_term }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="registration-type-container">
+                    <span class="registration-type-label">Hình thức đăng ký:</span>
+                    <div class="btn-group" role="group">
+                        <input type="radio" class="btn-check" name="registrationType" id="newCourse" value="HỌC MỚI" checked>
+                        <label class="btn btn-outline-primary" for="newCourse">HỌC MỚI</label>
+
+                        <input type="radio" class="btn-check" name="registrationType" id="retake" value="HỌC LẠI">
+                        <label class="btn btn-outline-primary" for="retake">HỌC LẠI</label>
+
+                        <input type="radio" class="btn-check" name="registrationType" id="improve" value="HỌC CẢI THIỆN">
+                        <label class="btn btn-outline-primary" for="improve">HỌC CẢI THIỆN</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><div class="card">        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <span class="fs-5">MÔN HỌC PHẦN ĐANG CHỜ ĐĂNG KÝ</span>
+            <div class="d-flex align-items-center gap-3">
+                <span class="total-credits bg-light text-primary px-3 py-2 rounded">
+                    Tổng số tín chỉ: <span id="total-credits">0</span>
+                </span>
+                <button id="register-btn" class="btn btn-light register-btn">
+                    <i class="bi bi-check2-circle me-2"></i>Đăng ký
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">                    <thead>
+                        <tr>
+                            <th>Chọn</th>
+                            <th>STT</th>
+                            <th>Mã MH cũ</th>
+                            <th>Mã HP</th>
+                            <th>Tên môn học</th>
+                            <th>TC</th>
+                            <th>Bắt buộc</th>
+                            <th>Học phần: học trước (a), tiên quyết (b), song hành (c)</th>
+                            <th>Học phần tương đương</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in courses %}
+                        <tr>
+                            <td class="text-center">
+                                <input type="checkbox" class="course-checkbox" data-course-id="{{ course.id }}" data-credits="{{ course.credits }}">
+                            </td>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ course.course_id }}</td>
+                            <td>{{ course.class_code }}</td>
+                            <td>{{ course.name }}</td>
+                            <td class="text-center">{{ course.credits }}</td>
+                            <td class="text-center">
+                                {% if course.is_mandatory %}
+                                <span class="text-success">✓</span>
+                                {% else %}
+                                <span class="text-danger">✗</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ course.prerequisites|default:'' }}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .table th {
+        background-color: #f8f9fa;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 0.9rem;
+    }
+    .table td {
+        vertical-align: middle;
+        font-size: 0.9rem;
+    }
+    .registration-header {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+    .registration-type-container {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .registration-type-label {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+    .course-checkbox {
+        width: 18px;
+        height: 18px;
+    }
+    .total-credits {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #0d6efd;
+    }
+    .register-btn {
+        min-width: 120px;
+    }
+    .mandatory-indicator {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    let totalCredits = 0;
+
+    // Cập nhật tổng số tín chỉ khi chọn/bỏ chọn môn học
+    $('.course-checkbox').change(function() {
+        const credits = parseInt($(this).data('credits'));
+        if (this.checked) {
+            totalCredits += credits;
+        } else {
+            totalCredits -= credits;
+        }
+        $('#total-credits').text(totalCredits);
+        
+        // Hiển thị cảnh báo nếu tổng số tín chỉ vượt quá 24
+        if (totalCredits > 24) {
+            alert('Cảnh báo: Tổng số tín chỉ không được vượt quá 24!');
+        }
+    });
+
+    // Xử lý nút đăng ký
+    $('#register-btn').click(function() {
+        const selectedCourses = [];
+        const registrationType = $('input[name="registrationType"]:checked').val();
+
+        $('.course-checkbox:checked').each(function() {
+            selectedCourses.push($(this).data('course-id'));
+        });
+
+        if (selectedCourses.length === 0) {
+            alert('Vui lòng chọn ít nhất một môn học!');
+            return;
+        }
+
+        if (totalCredits > 24) {
+            alert('Không thể đăng ký! Tổng số tín chỉ vượt quá 24.');
+            return;
+        }
+
+        // Gửi yêu cầu đăng ký
+        $.ajax({
+            url: '{% url "courses:register_course" %}',
+            type: 'POST',
+            data: {
+                courses: JSON.stringify(selectedCourses),
+                registration_type: registrationType,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    alert('Đăng ký học phần thành công!');
+                    location.reload();
+                } else {
+                    alert('Có lỗi xảy ra: ' + response.message);
+                }
+            },
+            error: function() {
+                alert('Có lỗi xảy ra khi đăng ký học phần!');
+            }
+        });
+    });
+});</script>
+{% endblock %}
