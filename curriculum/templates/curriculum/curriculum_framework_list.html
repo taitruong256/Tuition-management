@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách Chương trình khung</title>
+</head>
+<body>
+    <h1>Danh sách Chương trình khung</h1>
+    <ul>
+        {% for framework in frameworks %}
+            <li>
+                <strong>{{ framework.name }}</strong><br>
+                {{ framework.description }}<br>
+                <em>Ngày tạo: {{ framework.created_at }}</em>
+            </li>
+        {% empty %}
+            <li>Chưa có chương trình khung nào.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html> 
