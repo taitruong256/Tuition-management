@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Danh sách Chương trình khung{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-4">Danh sách Chương trình khung</h1>
+        </div>
+        {% if user.is_superuser %}
+        <div class="col-auto">
+            <a href="{% url 'curriculum:curriculum_framework_create' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Thêm chương trình khung
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        {% for framework in frameworks %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ framework.name }}</h5>
+                    <p class="card-text">{{ framework.description }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="bi bi-calendar"></i> Ngày tạo: {{ framework.created_at|date:"d/m/Y" }}
+                        </small>
+                        {% if user.is_superuser %}
+                        <div class="btn-group">
+                            <a href="{% url 'curriculum:curriculum_framework_update' framework.id %}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i> Sửa
+                            </a>
+                            <a href="{% url 'curriculum:curriculum_framework_delete' framework.id %}" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i> Xóa
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col">
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> Chưa có chương trình khung nào.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

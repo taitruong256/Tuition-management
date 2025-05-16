@@ -23,5 +23,8 @@ urlpatterns = [
     path('students/', include('students.urls')),
     path('payments/', include('payments.urls')),
     path('courses/', include('courses.urls')),
+    path('curriculum/', include('curriculum.urls')),
+    path('login/', views.custom_login, name='login'),
+    path('logout/', views.custom_logout, name='logout'),
     path('', views.home, name='home'),
 ]
