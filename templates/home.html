@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Trang chủ - Hệ thống Quản lý Học phí{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 mb-4">Hệ thống Quản lý Học phí</h1>
+            <p class="lead mb-5">Hệ thống quản lý thông tin học phí và đăng ký học phần cho sinh viên</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center g-4">
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-people fs-1 text-primary mb-3"></i>
+                    <h3 class="card-title">Quản lý Sinh viên</h3>
+                    <p class="card-text">Xem và quản lý thông tin sinh viên</p>
+                    <a href="{% url 'students:student_list' %}" class="btn btn-primary">Xem danh sách</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-cash-coin fs-1 text-primary mb-3"></i>
+                    <h3 class="card-title">Học phí</h3>
+                    <p class="card-text">Quản lý và xem thông tin học phí</p>
+                    <a href="{% url 'payments:payment_list' %}" class="btn btn-primary">Xem học phí</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-journal-text fs-1 text-primary mb-3"></i>
+                    <h3 class="card-title">Đăng ký Học phần</h3>
+                    <p class="card-text">Đăng ký và quản lý học phần</p>
+                    <a href="{% url 'courses:course_registration' %}" class="btn btn-primary">Đăng ký ngay</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
