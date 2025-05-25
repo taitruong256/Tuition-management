@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">THÔNG TIN SINH VIÊN</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <ul class="list-group mb-3">
+                <li class="list-group-item"><strong>Khóa:</strong> {{ student.course_year }}</li>
+                <li class="list-group-item"><strong>Bậc đào tạo:</strong> {{ student.education_level }}</li>
+                <li class="list-group-item"><strong>Ngành:</strong> {{ student.major }}</li>
+                <li class="list-group-item"><strong>Khoa:</strong> {{ student.faculty }}</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <ul class="list-group mb-3">
+                <li class="list-group-item"><strong>Lớp:</strong> {{ student.class_name }}</li>
+                <li class="list-group-item"><strong>Loại hình đào tạo:</strong> {{ student.education_type }}</li>
+                <li class="list-group-item"><strong>Chuyên ngành:</strong> {{ student.specialization }}</li>
+                <li class="list-group-item"><strong>Cơ sở:</strong> {{ student.campus }}</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row mt-4 justify-content-center">
+        <div class="col-md-6">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Xin chào!</h5>
+                    <h3 class="card-title">{{ student.full_name }}</h3>
+                    <div class="row">
+                        <div class="col-6"><strong>Giới tính:</strong></div>
+                        <div class="col-6">{{ student.gender }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><strong>MSSV:</strong></div>
+                        <div class="col-6">{{ student.student_id }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><strong>Trạng thái:</strong></div>
+                        <div class="col-6">{{ student.status }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><strong>Email:</strong></div>
+                        <div class="col-6">{{ student.email }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

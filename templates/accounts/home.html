@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Chào mừng đến với Hệ thống quản lý học phí</h3>
+                </div>
+                <div class="card-body">
+                    {% if user.is_authenticated %}
+                        <p class="text-center">Xin chào {{ user.full_name }}, chúc bạn một ngày tốt lành!</p>
+                    {% else %}
+                        <p class="text-center">Vui lòng đăng nhập để sử dụng hệ thống.</p>
+                        <div class="text-center">
+                            <a href="{% url 'login' %}" class="btn btn-primary">Đăng nhập</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
