@@ -21,7 +21,11 @@
                                 Xin chào, {{ user.full_name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                {% if user.is_staff or user.is_superuser %}
+                                <li><a class="dropdown-item" href="/admin/">Quản trị</a></li>
+                                {% endif %}
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">Trang cá nhân</a></li>
+                                <li><a class="dropdown-item" href="{% url 'curriculum:my_curriculum' %}">Chương trình khung</a></li>
                                 <li><a class="dropdown-item" href="{% url 'password_change' %}">Đổi mật khẩu</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Đăng xuất</a></li>

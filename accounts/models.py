@@ -38,6 +38,7 @@ class StudentUser(AbstractBaseUser, PermissionsMixin):
     education_level = models.CharField(max_length=50, verbose_name='Bậc đào tạo', blank=True, null=True)
     education_type = models.CharField(max_length=50, verbose_name='Loại hình đào tạo', blank=True, null=True)
     campus = models.CharField(max_length=100, verbose_name='Cơ sở', blank=True, null=True)
+    curriculum = models.ForeignKey('curriculum.Curriculum', on_delete=models.SET_NULL, null=True, blank=True, related_name='students', verbose_name='Chương trình khung')
 
     objects = StudentUserManager()
 
