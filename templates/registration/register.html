@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Đăng ký học phần</h2>
+    <form method="get" class="mb-3">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <select name="semester" class="form-select" onchange="this.form.submit()">
+                    {% for semester in semesters %}
+                        <option value="{{ semester.id }}" {% if semester == selected_semester %}selected{% endif %}>{{ semester.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </form>
+    {% if messages %}
+    <div class="mb-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} text-center">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">
+            <strong>CHỌN MÔN HỌC</strong>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover mb-0" id="subject-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã môn</th>
+                            <th>Tên môn học</th>
+                            <th>Số TC</th>
+                            <th>Chọn</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for subject in subjects %}
+                        <tr class="subject-row" data-subject-id="{{ subject.id }}" style="cursor:pointer;">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ subject.code }}</td>
+                            <td>{{ subject.name }}</td>
+                            <td>{{ subject.credits }}</td>
+                            <td><input type="radio" name="subject" value="{{ subject.id }}" style="pointer-events:none;"></td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="5" class="text-center text-muted">Chưa có môn học nào.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <strong>CÁC LỚP HỌC PHẦN CỦA MÔN HỌC ĐÃ CHỌN</strong>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover mb-0" id="class-subject-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã lớp HP</th>
+                                <th>Loại lớp</th>
+                                <th>Phòng</th>
+                                <th>Giảng viên</th>
+                                <th>Số lượng tối đa</th>
+                                <th>Đã đăng ký</th>
+                                <th>Chọn</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cs in class_subjects %}
+                            <tr class="class-subject-row" data-subject="{{ cs.subject.id }}" style="display:none; cursor:pointer;">
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ cs.id }}</td>
+                                <td>{{ cs.get_type_display }}</td>
+                                <td>{{ cs.room }}</td>
+                                <td>{{ cs.lecturer1 }}{% if cs.lecturer2 %}, {{ cs.lecturer2 }}{% endif %}</td>
+                                <td>{{ cs.max_students }}</td>
+                                <td>{{ cs.registrations.count }}</td>
+                                <td><input type="radio" name="class_subject" value="{{ cs.id }}" style="pointer-events:none;"></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Đăng ký học phần</button>
+            </div>
+        </div>
+    </form>
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <strong>LỚP HỌC PHẦN ĐÃ ĐĂNG KÝ TRONG HỌC KỲ NÀY</strong>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã lớp HP</th>
+                            <th>Tên môn học</th>
+                            <th>Loại lớp</th>
+                            <th>Phòng</th>
+                            <th>Giảng viên</th>
+                            <th>Số TC</th>
+                            <th>Ngày đăng ký</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reg in registered %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ reg.class_subject.id }}</td>
+                            <td>{{ reg.class_subject.subject.name }}</td>
+                            <td>{{ reg.class_subject.get_type_display }}</td>
+                            <td>{{ reg.class_subject.room }}</td>
+                            <td>{{ reg.class_subject.lecturer1 }}{% if reg.class_subject.lecturer2 %}, {{ reg.class_subject.lecturer2 }}{% endif %}</td>
+                            <td>{{ reg.class_subject.subject.credits }}</td>
+                            <td>{{ reg.registered_at|date:'d/m/Y' }}</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-info disabled">Xem</a>
+                                <form method="post" style="display:inline;" onsubmit="return confirm('Bạn chắc chắn muốn hủy đăng ký lớp này?');">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="cancel_registration" value="{{ reg.id }}">
+                                    <button type="submit" class="btn btn-sm btn-danger">Hủy</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="9" class="text-center text-muted">Bạn chưa đăng ký lớp học phần nào.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function showClassSubjects(subjectId) {
+    document.querySelectorAll('.class-subject-row').forEach(function(row) {
+        row.style.display = row.getAttribute('data-subject') == subjectId ? '' : 'none';
+    });
+    // Highlight row
+    document.querySelectorAll('.subject-row').forEach(function(row) {
+        if (row.getAttribute('data-subject-id') == subjectId) {
+            row.classList.add('table-primary');
+            row.querySelector('input[type=radio]').checked = true;
+        } else {
+            row.classList.remove('table-primary');
+            row.querySelector('input[type=radio]').checked = false;
+        }
+    });
+}
+// Cho phép click vào cả hàng để chọn môn học
+    document.querySelectorAll('.subject-row').forEach(function(row) {
+        row.addEventListener('click', function() {
+            showClassSubjects(row.getAttribute('data-subject-id'));
+        });
+    });
+// Cho phép click vào cả hàng để chọn lớp học phần
+    document.querySelectorAll('.class-subject-row').forEach(function(row) {
+        row.addEventListener('click', function() {
+            var radio = row.querySelector('input[type=radio]');
+            if (radio) radio.checked = true;
+            document.querySelectorAll('.class-subject-row').forEach(function(r) {
+                r.classList.remove('table-primary');
+            });
+            row.classList.add('table-primary');
+        });
+    });
+</script>
+{% endblock %} 

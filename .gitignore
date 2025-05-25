@@ -7,7 +7,7 @@ migrations
 
 # Virtual Environment
 venv/
-.evn 
+.env
 
 # IDE
 .vscode/
