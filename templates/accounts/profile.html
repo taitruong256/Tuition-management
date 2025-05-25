@@ -2,46 +2,62 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center text-primary mb-4">THÔNG TIN SINH VIÊN</h2>
-    <div class="row">
-        <div class="col-md-6">
-            <ul class="list-group mb-3">
-                <li class="list-group-item"><strong>Khóa:</strong> {{ student.course_year }}</li>
-                <li class="list-group-item"><strong>Bậc đào tạo:</strong> {{ student.education_level }}</li>
-                <li class="list-group-item"><strong>Ngành:</strong> {{ student.major }}</li>
-                <li class="list-group-item"><strong>Khoa:</strong> {{ student.faculty }}</li>
-            </ul>
-        </div>
-        <div class="col-md-6">
-            <ul class="list-group mb-3">
-                <li class="list-group-item"><strong>Lớp:</strong> {{ student.class_name }}</li>
-                <li class="list-group-item"><strong>Loại hình đào tạo:</strong> {{ student.education_type }}</li>
-                <li class="list-group-item"><strong>Chuyên ngành:</strong> {{ student.specialization }}</li>
-                <li class="list-group-item"><strong>Cơ sở:</strong> {{ student.campus }}</li>
-            </ul>
-        </div>
-    </div>
-    <div class="row mt-4 justify-content-center">
-        <div class="col-md-6">
-            <div class="card bg-info text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Xin chào!</h5>
-                    <h3 class="card-title">{{ student.full_name }}</h3>
-                    <div class="row">
-                        <div class="col-6"><strong>Giới tính:</strong></div>
-                        <div class="col-6">{{ student.gender }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><strong>MSSV:</strong></div>
-                        <div class="col-6">{{ student.student_id }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><strong>Trạng thái:</strong></div>
-                        <div class="col-6">{{ student.status }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6"><strong>Email:</strong></div>
-                        <div class="col-6">{{ student.email }}</div>
+    <h2 class="text-center text-primary mb-4" style="letter-spacing:2px;">THÔNG TIN SINH VIÊN</h2>
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 text-center mb-3 mb-md-0">
+                            <div class="bg-info rounded-circle mx-auto" style="width:110px;height:110px;display:flex;align-items:center;justify-content:center;">
+                                <span class="fw-bold text-white" style="font-size:2.5rem;">{{ student.full_name|slice:':1' }}</span>
+                            </div>
+                            <h4 class="mt-3 mb-1">{{ student.full_name }}</h4>
+                            <span class="badge bg-success mb-2">{{ student.status }}</span>
+                            <div class="text-muted">MSSV: <strong>{{ student.student_id }}</strong></div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row mb-2">
+                                <div class="col-6"><strong>Giới tính:</strong></div>
+                                <div class="col-6">{{ student.gender }}</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-6"><strong>Email:</strong></div>
+                                <div class="col-6">{{ student.email }}</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-6"><strong>Khóa:</strong></div>
+                                <div class="col-6">{{ student.course_year }}</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-6"><strong>Bậc đào tạo:</strong></div>
+                                <div class="col-6">{{ student.education_level }}</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-6"><strong>Ngành:</strong></div>
+                                <div class="col-6">{{ student.major }}</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-6"><strong>Khoa:</strong></div>
+                                <div class="col-6">{{ student.faculty }}</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-6"><strong>Lớp:</strong></div>
+                                <div class="col-6">{{ student.class_name }}</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-6"><strong>Loại hình đào tạo:</strong></div>
+                                <div class="col-6">{{ student.education_type }}</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-6"><strong>Chuyên ngành:</strong></div>
+                                <div class="col-6">{{ student.specialization }}</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-6"><strong>Cơ sở:</strong></div>
+                                <div class="col-6">{{ student.campus }}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
