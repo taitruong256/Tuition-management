@@ -1,0 +1,10 @@
+SinhVien ────1──► ChuongTrinhKhung
+ChuongTrinhKhung ────1──►* HocKy
+HocKy ────1──►* MonHoc
+MonHoc ────1──►* LopHocPhan
+LopHocPhan ────1──►1 Phong
+LopHocPhan ────1──►1-2 GiangVien
+SinhVien ⬌ LopHocPhan (qua DangKyLopHocPhan)
+SinhVien ────1──►* HoaDonThanhToan
+HoaDonThanhToan ────1──►* ChiTietHoaDon
+ChiTietHoaDon ────► (DangKyLopHocPhan hoặc CongNoKhac)
