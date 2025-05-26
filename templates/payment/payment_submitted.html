@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Gửi yêu cầu thanh toán thành công!</h2>
+    <p>Tổng số tiền: <b>{{ total_amount|intcomma }} VNĐ</b></p>
+    <a href="{{ momo_url }}" class="btn btn-success btn-lg">Chuyển sang MoMo để thanh toán</a>
+</div>
+{% endblock %}

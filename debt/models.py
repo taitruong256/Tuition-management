@@ -5,6 +5,7 @@ from curriculum.models import Semester
 class TuitionDebt(models.Model):
     STATUS_CHOICES = [
         ('unpaid', 'Chưa thanh toán'),
+        ('pending', 'Chờ xác nhận'),
         ('paid', 'Đã thanh toán'),
     ]
     student = models.ForeignKey(StudentUser, on_delete=models.CASCADE, related_name='tuition_debts')
@@ -27,6 +28,7 @@ class TuitionDebt(models.Model):
 class OtherFee(models.Model):
     STATUS_CHOICES = [
         ('unpaid', 'Chưa thanh toán'),
+        ('pending', 'Chờ xác nhận'),
         ('paid', 'Đã thanh toán'),
     ]
     student = models.ForeignKey(StudentUser, on_delete=models.CASCADE, related_name='other_fees')
@@ -37,3 +39,18 @@ class OtherFee(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.name} ({self.get_status_display()})"
+
+class PaymentHistory(models.Model):
+    PAYMENT_TYPE_CHOICES = [
+        ('tuition', 'Học phí'),
+        ('other', 'Khoản thu khác'),
+    ]
+    student = models.ForeignKey(StudentUser, on_delete=models.CASCADE, related_name='payments')
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name='payments')
+    amount = models.PositiveBigIntegerField(verbose_name='Số tiền thanh toán')
+    payment_type = models.CharField(max_length=10, choices=PAYMENT_TYPE_CHOICES)
+    description = models.CharField(max_length=255, blank=True, verbose_name='Mô tả')
+    paid_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student} - {self.get_payment_type_display()} - {self.amount} ({self.paid_at:%d/%m/%Y})"

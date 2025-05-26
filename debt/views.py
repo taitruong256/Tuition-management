@@ -1,7 +1,7 @@
 # debt/utils.py
 from registration.models import Registration
 from django.contrib.auth.decorators import login_required
-from .models import TuitionDebt, OtherFee
+from .models import TuitionDebt, OtherFee, PaymentHistory
 from django.shortcuts import render
 from curriculum.models import Semester
 from django.db.models import Sum
@@ -74,12 +74,13 @@ def my_debt(request):
         })
 
     # Các khoản thu khác
-    from .models import OtherFee
     other_fees = OtherFee.objects.filter(student=request.user)
 
+    payment_history = PaymentHistory.objects.filter(student=request.user).order_by('-paid_at')
     return render(request, 'debt/my_debt.html', {
         'semester_data': semester_data,
         'other_fees': other_fees,
+        'payment_history': payment_history,
     })
 
 @login_required

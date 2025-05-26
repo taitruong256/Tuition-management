@@ -111,3 +111,4 @@ Tuition Management System
 
 ## Run
 - Dump data: python dumpdata_direct.py 
+- Load data: python manage.py loaddata sample_data.json

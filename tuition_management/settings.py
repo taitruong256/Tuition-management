@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'curriculum',
     'registration',
     'debt',
+    'payment',
 ]
 
 MIDDLEWARE = [

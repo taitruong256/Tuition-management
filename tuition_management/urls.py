@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from accounts.views import home
+from accounts.views import home, logout_view
 
 urlpatterns = [
     path('', home, name='home'),
@@ -27,4 +27,6 @@ urlpatterns = [
     path('curriculum/', include('curriculum.urls', namespace='curriculum')),
     path('registration/', include('registration.urls', namespace='registration')),
     path('debt/', include('debt.urls', namespace='debt')),
+    path('payment/', include('payment.urls', namespace='payment')),
+    path('admin/logout/', logout_view, name='admin_logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
