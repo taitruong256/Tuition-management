@@ -1,0 +1,67 @@
+https://www.planttext.com/
+@startuml
+
+' Định nghĩa các lớp
+class SinhVien {
+  - taiKhoan: String
+  - hoTen: String
+  - maSV: String
+  + dangNhap(): void
+  + dangXuat(): void
+  + xemSuaThongTin(): void
+  + xemChuongTrinh(): void
+  + dangKyHocPhan(): void
+  + huyDangKy(): void
+  + xemDanhSachDK(): void
+  + xemCongNo(): void
+  + thanhToan(): void
+  + xemHoaDon(): void
+  + guiYeuCau(): void
+}
+
+class QuanTriVien {
+  - taiKhoan: String
+  - hoTen: String
+  - maQT: String
+  + dangNhap(): void
+  + dangXuat(): void
+  + quanLyTaiKhoanSV(): void
+  + quanLyHocPhan(): void
+  + quanLyCongNo(): void
+  + quanLyYeuCau(): void
+}
+
+class HocPhan {
+  - maHP: String
+  - tenHP: String
+  - soTC: Integer
+  + themHocPhan(): void
+  + xoaHocPhan(): void
+}
+
+class CongNo {
+  - maCN: String
+  - soTien: Double
+  - ngayHan: Date
+  + capNhatCongNo(): void
+  + taoHoaDon(): void
+}
+
+class YeuCauHoTro {
+  - maYC: String
+  - noiDung: String
+  - ngayGui: Date
+  + guiYeuCau(): void
+  + xemTrangThai(): void
+}
+
+' Định nghĩa mối quan hệ
+SinhVien --> HocPhan : "đăng ký"
+SinhVien --> CongNo : "xem/thanh toán"
+SinhVien --> YeuCauHoTro : "gửi"
+QuanTriVien --> SinhVien : "quản lý"
+QuanTriVien --> HocPhan : "quản lý"
+QuanTriVien --> CongNo : "quản lý"
+QuanTriVien --> YeuCauHoTro : "quản lý"
+
+@enduml

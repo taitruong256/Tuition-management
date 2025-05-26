@@ -1,0 +1,25 @@
+@startuml
+actor SinhVien
+participant "Giao diện web" as Web
+participant "Hệ thống Django" as Django
+participant "CSDL" as DB
+
+SinhVien -> Web : Đăng nhập
+Web -> Django : Gửi thông tin đăng nhập
+Django -> DB : Kiểm tra tài khoản
+DB --> Django : Kết quả xác thực
+Django --> Web : Hiển thị giao diện đăng ký
+
+SinhVien -> Web : Chọn học kỳ, môn học
+Web -> Django : Gửi yêu cầu lấy lớp học phần
+Django -> DB : Truy vấn lớp học phần
+DB --> Django : Danh sách lớp học phần
+Django --> Web : Hiển thị lớp học phần
+
+SinhVien -> Web : Chọn lớp học phần, nhóm
+Web -> Django : Gửi yêu cầu đăng ký
+Django -> DB : Kiểm tra đăng ký, lưu đăng ký
+DB --> Django : Kết quả đăng ký
+Django --> Web : Thông báo thành công/thất bại
+Web --> SinhVien : Hiển thị kết quả
+@enduml

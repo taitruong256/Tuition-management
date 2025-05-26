@@ -1,0 +1,22 @@
+https://www.planttext.com/
+@startuml
+start
+
+:Đăng nhập hệ thống;
+:Chọn học kỳ;
+:Chọn môn học;
+:Chọn lớp học phần;
+:Chọn nhóm lý thuyết/thực hành (nếu có);
+
+if (Đã đăng ký nhóm này?) then (Có)
+    :Hiển thị thông báo "Bạn đã đăng ký nhóm này rồi!";
+    stop
+else (Chưa)
+    :Đăng ký nhóm;
+    :Tạo công nợ học phí (nếu có);
+    :Hiển thị thông báo "Đăng ký thành công!";
+endif
+
+:Hiển thị danh sách các lớp học phần đã đăng ký;
+stop
+@enduml

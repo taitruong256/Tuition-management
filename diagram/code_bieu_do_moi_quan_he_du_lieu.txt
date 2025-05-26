@@ -1,0 +1,81 @@
+@startuml
+entity Curriculum {
+  * id : PK
+  * name : varchar
+}
+
+entity Semester {
+  * id : PK
+  * name : varchar
+  * order : int
+  * curriculum_id : FK
+}
+
+entity Subject {
+  * id : PK
+  * semester_id : FK
+  * code : varchar
+  * name : varchar
+  * credits : int
+  * theory_credits : int
+  * practice_credits : int
+}
+
+entity ClassSubject {
+  * id : PK
+  * subject_id : FK
+  * name : varchar
+  * room_id : FK
+  * expected_class : varchar
+  * max_students : int
+  * status : varchar
+}
+
+entity Group {
+  * id : PK
+  * class_subject_id : FK
+  * group_type : char(2)  // 'LT' hoặc 'TH'
+  * group_number : int
+  * lecturer_id : FK
+  * schedule : varchar
+  * room_id : FK
+  * max_students : int
+}
+
+entity Registration {
+  * id : PK
+  * student_id : FK
+  * group_id : FK
+  * registered_at : datetime
+}
+
+entity StudentUser {
+  * id : PK
+  * username : varchar
+  * full_name : varchar
+  * email : varchar
+  * ...
+}
+
+entity Room {
+  * id : PK
+  * name : varchar
+  * description : text
+}
+
+entity Lecturer {
+  * id : PK
+  * name : varchar
+  * email : varchar
+}
+
+Curriculum ||--o{ Semester : "1-n"
+Semester ||--o{ Subject : "1-n"
+Subject ||--o{ ClassSubject : "1-n"
+ClassSubject ||--o{ Group : "1-n"
+Group ||--o{ Registration : "1-n"
+StudentUser ||--o{ Registration : "1-n"
+ClassSubject }o--|| Room : "n-1"
+Group }o--|| Room : "n-1"
+Group }o--|| Lecturer : "n-1"
+@enduml

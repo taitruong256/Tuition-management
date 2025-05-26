@@ -1,0 +1,25 @@
+@startuml
+left to right direction
+actor SinhVien as SV
+actor QuanTri as QT
+
+rectangle "Hệ thống Đăng ký học phần" {
+  SV -- (Đăng nhập/Đăng xuất)
+  SV -- (Xem thông tin cá nhân)
+  SV -- (Chọn học kỳ, môn học)
+  SV -- (Xem lớp học phần)
+  SV -- (Đăng ký nhóm lý thuyết/thực hành)
+  SV -- (Hủy đăng ký nhóm)
+  SV -- (Xem danh sách đăng ký)
+  SV -- (Xem công nợ học phí)
+  SV -- (Thanh toán học phí)
+  SV -- (Xem hóa đơn học phí)
+  SV -- (Gửi yêu cầu hỗ trợ)
+
+  QT -- (Quản lý tài khoản sinh viên)
+  QT -- (Quản lý môn học, học kỳ, chương trình khung)
+  QT -- (Quản lý lớp học phần, nhóm)
+  QT -- (Quản lý công nợ, hóa đơn)
+  QT -- (Quản lý yêu cầu hỗ trợ)
+}
+@enduml

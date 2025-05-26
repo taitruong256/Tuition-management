@@ -1,0 +1,47 @@
+@startuml
+left to right direction
+
+package "Quản lý tài khoản (accounts)" as ACC {
+  usecase "Đăng nhập/Đăng xuất" as UC1
+  usecase "Xem/sửa thông tin cá nhân" as UC2
+}
+
+package "Quản lý chương trình khung (curriculum)" as CUR {
+  usecase "Xem chương trình khung" as UC3
+  usecase "Xem học kỳ" as UC4
+  usecase "Xem môn học" as UC5
+}
+
+package "Đăng ký học phần (registration)" as REG {
+  usecase "Xem lớp học phần" as UC6
+  usecase "Xem nhóm LT/TH" as UC7
+  usecase "Đăng ký/hủy đăng ký nhóm" as UC8
+  usecase "Xem danh sách đăng ký" as UC9
+}
+
+package "Quản lý công nợ (debt)" as DEBT {
+  usecase "Tạo công nợ khi đăng ký" as UC10
+  usecase "Xem công nợ" as UC11
+}
+
+package "Thanh toán học phí (payment)" as PAY {
+  usecase "Thanh toán học phí" as UC12
+}
+
+package "Quản lý hóa đơn (invoice)" as INV {
+  usecase "Xem hóa đơn học phí" as UC13
+}
+
+package "Hỗ trợ (support)" as SUP {
+  usecase "Gửi yêu cầu hỗ trợ" as UC14
+  usecase "Xem trạng thái hỗ trợ" as UC15
+}
+
+ACC -[hidden]-> CUR
+CUR -[hidden]-> REG
+REG -[hidden]-> DEBT
+DEBT -[hidden]-> PAY
+PAY -[hidden]-> INV
+INV -[hidden]-> SUP
+
+@enduml
