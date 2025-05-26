@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block content %}
 <div class="container mt-5">
@@ -11,6 +12,7 @@
                 <div class="card-body text-center">
                     {% if user.is_authenticated %}
                         <p class="mb-4">Xin chào <strong>{{ user.full_name }}</strong>, chúc bạn một ngày tốt lành!</p>
+                        
                         <div class="row justify-content-center g-4">
                             <div class="col-12 col-md-6 col-lg-3">
                                 <a href="{% url 'profile' %}" class="btn btn-outline-primary btn-lg w-100 py-4">
@@ -31,7 +33,7 @@
                                 </a>
                             </div>
                             <div class="col-12 col-md-6 col-lg-3">
-                                <a href="#" class="btn btn-outline-danger btn-lg w-100 py-4 disabled">
+                                <a href="{% url 'debt:my_debt' %}" class="btn btn-outline-danger btn-lg w-100 py-4">
                                     <i class="bi bi-cash-coin" style="font-size:2rem;"></i><br>
                                     Công nợ
                                 </a>

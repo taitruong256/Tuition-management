@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 class Curriculum(models.Model):
     name = models.CharField(max_length=255, verbose_name='Tên chương trình khung')
@@ -22,6 +23,17 @@ class Subject(models.Model):
     code = models.CharField(max_length=20, verbose_name='Mã môn học')
     name = models.CharField(max_length=255, verbose_name='Tên môn học')
     credits = models.PositiveIntegerField(verbose_name='Số tín chỉ')
+    theory_credits = models.PositiveIntegerField(verbose_name='Số tín chỉ lý thuyết', default=0)
+    practice_credits = models.PositiveIntegerField(verbose_name='Số tín chỉ thực hành', default=0)
+
+    def clean(self):
+        if self.theory_credits > self.credits:
+            raise ValidationError('Số tín chỉ lý thuyết không được lớn hơn số tín chỉ môn học')
+        self.practice_credits = self.credits - self.theory_credits
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.code} - {self.name} ({self.semester})"

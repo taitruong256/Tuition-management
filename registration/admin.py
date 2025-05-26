@@ -13,9 +13,20 @@ class LecturerAdmin(admin.ModelAdmin):
 
 @admin.register(ClassSubject)
 class ClassSubjectAdmin(admin.ModelAdmin):
-    list_display = ('subject', 'type', 'room', 'lecturer1', 'lecturer2', 'schedule', 'max_students')
+    list_display = ('subject', 'type', 'practice_group', 'room', 'theory_lecturer', 'practice_lecturer', 'schedule', 'max_students')
     list_filter = ('type', 'room', 'subject')
     search_fields = ('subject__name',)
+    fieldsets = (
+        (None, {
+            'fields': ('subject', 'type', 'practice_group', 'room', 'theory_lecturer', 'practice_lecturer', 'schedule', 'max_students')
+        }),
+    )
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if 'practice_group' in form.base_fields:
+            form.base_fields['practice_group'].required = False
+        return form
 
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):

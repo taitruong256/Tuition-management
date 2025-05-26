@@ -4,10 +4,17 @@ from django.contrib.auth.views import LoginView, PasswordResetView, PasswordRese
 from django.urls import reverse_lazy
 from .forms import StudentLoginForm, StudentPasswordResetForm, StudentPasswordChangeForm
 import ssl
+from debt.models import TuitionDebt, OtherFee
+from django.db.models import Sum
 ssl._create_default_https_context = ssl._create_unverified_context
 
 def home(request):
-    return render(request, 'accounts/home.html')
+    total_debt = 0
+    if request.user.is_authenticated:
+        tuition = TuitionDebt.objects.filter(student=request.user, status='unpaid').aggregate(Sum('total_amount'))['total_amount__sum'] or 0
+        other = OtherFee.objects.filter(student=request.user, status='unpaid').aggregate(Sum('amount'))['amount__sum'] or 0
+        total_debt = tuition + other
+    return render(request, 'accounts/home.html', {'total_debt': total_debt})
 
 # Create your views here.
 
