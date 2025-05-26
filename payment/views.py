@@ -15,6 +15,9 @@ def pay_tuition(request):
         tuition_ids = request.POST.getlist('tuition_ids')
         other_ids = request.POST.getlist('other_ids')
         total_amount = int(request.POST.get('total_amount', 0))
+        # Cập nhật trạng thái các khoản đã chọn sang 'pending'
+        TuitionDebt.objects.filter(id__in=tuition_ids, student=request.user).update(status='pending')
+        OtherFee.objects.filter(id__in=other_ids, student=request.user).update(status='pending')
         # Gọi API MoMo ở đây với total_amount
         momo_response = {"payUrl": "https://momo.vn/redirect/payment-demo"}
         return render(request, 'payment/payment_submitted.html', {

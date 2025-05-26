@@ -4,6 +4,7 @@ from accounts.models import StudentUser
 from curriculum.models import Subject, Semester
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from debt.models import TuitionDebt
 
 @login_required
 def register(request):
@@ -44,6 +45,11 @@ def register(request):
             cs = ClassSubject.objects.get(id=class_subject_id)
             if not Registration.objects.filter(student=student, class_subject=cs).exists():
                 Registration.objects.create(student=student, class_subject=cs)
+                # Sau khi đăng ký, cập nhật công nợ học phí về trạng thái chưa thanh toán
+                semester = cs.subject.semester
+                debt, created = TuitionDebt.objects.get_or_create(student=student, semester=semester)
+                debt.status = 'unpaid'
+                debt.save()
                 messages.success(request, f'Đăng ký lớp học phần {cs} thành công!')
             else:
                 messages.warning(request, 'Bạn đã đăng ký lớp học phần này rồi!')

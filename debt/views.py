@@ -33,6 +33,7 @@ def update_tuition_debt_for_student(student, semester):
 def my_debt(request):
     from registration.models import Registration
     from curriculum.models import Semester
+    from debt.models import TuitionDebt
 
     # Lấy tất cả đăng ký của sinh viên, kèm theo thông tin học kỳ
     regs = Registration.objects.filter(student=request.user).select_related(
@@ -51,6 +52,9 @@ def my_debt(request):
         subject_rows = []
         total_credits = 0
         total_amount = 0
+        # Lấy trạng thái công nợ của học kỳ này
+        debt = TuitionDebt.objects.filter(student=request.user, semester=semester).first()
+        debt_status = debt.get_status_display() if debt else 'Chưa thanh toán'
         for reg in regs:
             subject = reg.class_subject.subject
             credits = subject.credits
@@ -63,6 +67,7 @@ def my_debt(request):
                 'practice_credits': subject.practice_credits,
                 'amount': amount,
                 'registered_at': reg.registered_at,
+                'debt_status': debt_status,
             })
             total_credits += credits
             total_amount += amount
@@ -72,10 +77,8 @@ def my_debt(request):
             'total_credits': total_credits,
             'total_amount': total_amount,
         })
-
     # Các khoản thu khác
     other_fees = OtherFee.objects.filter(student=request.user)
-
     payment_history = PaymentHistory.objects.filter(student=request.user).order_by('-paid_at')
     return render(request, 'debt/my_debt.html', {
         'semester_data': semester_data,

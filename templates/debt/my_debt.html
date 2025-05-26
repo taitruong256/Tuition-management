@@ -20,6 +20,7 @@
                             <th>TC Thực hành</th>
                             <th>Học phí</th>
                             <th>Ngày đăng ký</th>
+                            <th>Trạng thái</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,6 +34,7 @@
                             <td>{{ row.practice_credits }}</td>
                             <td>{{ row.amount|intcomma }} VNĐ</td>
                             <td>{{ row.registered_at|date:'d/m/Y' }}</td>
+                            <td>{{ row.debt_status }}</td>
                         </tr>
                         {% endfor %}
                         <tr class="table-secondary fw-bold">
@@ -40,7 +42,7 @@
                             <td>{{ sem.total_credits }}</td>
                             <td colspan="2"></td>
                             <td>{{ sem.total_amount|intcomma }} VNĐ</td>
-                            <td></td>
+                            <td colspan="2"></td>
                         </tr>
                     </tbody>
                 </table>
