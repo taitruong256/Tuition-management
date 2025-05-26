@@ -4,10 +4,11 @@ migrations
 
 # Django database 
 *.sqlite3 
+*.json
 
 # Virtual Environment
 venv/
 .env
 
 # IDE
-.vscode/
+.vscode/s

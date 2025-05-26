@@ -107,3 +107,7 @@ Tuition Management System
 - Django
 - Python
 - SQLite
+
+
+## Run
+- Dump data: python dumpdata_direct.py 
