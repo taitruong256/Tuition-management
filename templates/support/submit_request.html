@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Gửi yêu cầu hỗ trợ</h2>
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Gửi yêu cầu</button>
+    </form>
+    <h4 class="mt-5">Lịch sử yêu cầu hỗ trợ của bạn</h4>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Tiêu đề</th>
+                <th>Nội dung</th>
+                <th>Thời gian gửi</th>
+                <th>Trạng thái</th>
+                <th>Phản hồi từ nhà trường</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for req in requests %}
+            <tr>
+                <td>{{ req.subject }}</td>
+                <td>{{ req.content }}</td>
+                <td>{{ req.created_at|date:'d/m/Y H:i' }}</td>
+                <td>{{ req.get_status_display }}</td>
+                <td>{% if req.admin_reply %}{{ req.admin_reply }}{% else %}<span class="text-muted">Chưa có phản hồi</span>{% endif %}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center">Bạn chưa gửi yêu cầu nào.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} 

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Danh sách hóa đơn/biên lai thanh toán</h2>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Mã hóa đơn</th>
+                <th>Ngày tạo</th>
+                <th>Số tiền</th>
+                <th>Loại thanh toán</th>
+                <th>Mô tả</th>
+                <th>Tải về/In hóa đơn</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invoice in invoices %}
+            <tr>
+                <td>{{ invoice.id }}</td>
+                <td>{{ invoice.created_at|date:'d/m/Y H:i' }}</td>
+                <td>{{ invoice.payment.amount|intcomma }} VNĐ</td>
+                <td>{{ invoice.payment.get_payment_type_display }}</td>
+                <td>{{ invoice.payment.description }}</td>
+                <td>
+                    {% if invoice.pdf_file %}
+                        <a href="{% url 'invoice:download_invoice' invoice.id %}" class="btn btn-success btn-sm" target="_blank">Tải về/In hóa đơn</a>
+                    {% else %}
+                        <span class="text-muted">Chưa có file</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center">Bạn chưa có hóa đơn nào.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} 

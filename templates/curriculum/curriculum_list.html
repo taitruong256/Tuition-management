@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Danh sách chương trình khung</h2>
+    <div class="row justify-content-center">
+        {% for curriculum in curriculums %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">{{ curriculum.name }}</h5>
+                    <a href="{% url 'curriculum:detail' curriculum.pk %}" class="btn btn-outline-primary mt-3">Xem chi tiết</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted">Chưa có chương trình khung nào.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

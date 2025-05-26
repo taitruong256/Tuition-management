@@ -1,0 +1,377 @@
+[
+{
+  "model": "accounts.studentuser",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$Z1byv5Vt4ZNqPMj2mdPvdN$UHOfZ1Mk5a7CE3vfv5vCEB+cYK5rVB0eY+HmvyXNpIU=",
+    "last_login": "2025-05-26T01:03:31.911Z",
+    "is_superuser": true,
+    "student_id": "admin",
+    "email": "taitruong256@gmail.com",
+    "full_name": "tai",
+    "is_active": true,
+    "is_staff": true,
+    "date_joined": "2025-05-25T18:17:41.743Z",
+    "gender": null,
+    "status": null,
+    "class_name": null,
+    "major": null,
+    "faculty": null,
+    "specialization": null,
+    "course_year": null,
+    "education_level": null,
+    "education_type": null,
+    "campus": null,
+    "curriculum": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.studentuser",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$LOL1KXOC8GKqewlM7pjC9q$onver6pV3jmWGrZg6SpbBgAsGpLJUO2hAJ1V4i7Ff7w=",
+    "last_login": "2025-05-26T02:15:07.666Z",
+    "is_superuser": false,
+    "student_id": "21078321",
+    "email": "taitruong270@gmail.com",
+    "full_name": "Trương Đức Tài",
+    "is_active": true,
+    "is_staff": false,
+    "date_joined": "2025-05-25T18:26:59.592Z",
+    "gender": "Nam",
+    "status": "Đang học",
+    "class_name": "DHKHMT18B",
+    "major": "Khoa học dữ liệu",
+    "faculty": "Công nghệ thông tin",
+    "specialization": "KHDL",
+    "course_year": "2021-2025",
+    "education_level": "Đại học",
+    "education_type": "Đại trà",
+    "campus": "CS1",
+    "curriculum": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.studentuser",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$QzuMEts3gwB4zuv5tBdtdP$s6oNljTrangEQGuTXCgjJtzaULaMYfMn+my5rukZsBA=",
+    "last_login": "2025-05-26T00:57:44.257Z",
+    "is_superuser": false,
+    "student_id": "21110123",
+    "email": "t@gmail.com",
+    "full_name": "Nguyễn Thành Đạt",
+    "is_active": true,
+    "is_staff": false,
+    "date_joined": "2025-05-26T00:55:45.920Z",
+    "gender": "Nam",
+    "status": "Đang học",
+    "class_name": "DHKHMT18B",
+    "major": "Khoa học máy tính",
+    "faculty": "Công nghệ thông tin",
+    "specialization": "KHMT",
+    "course_year": "K17",
+    "education_level": "Đại học",
+    "education_type": "Đại trà",
+    "campus": "CS1",
+    "curriculum": 2,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "curriculum.curriculum",
+  "pk": 1,
+  "fields": {
+    "name": "Khoa học dữ liệu K17"
+  }
+},
+{
+  "model": "curriculum.curriculum",
+  "pk": 2,
+  "fields": {
+    "name": "Khoa học máy tính K17"
+  }
+},
+{
+  "model": "curriculum.semester",
+  "pk": 1,
+  "fields": {
+    "curriculum": 1,
+    "name": "Học kỳ 1",
+    "order": 1
+  }
+},
+{
+  "model": "curriculum.semester",
+  "pk": 2,
+  "fields": {
+    "curriculum": 1,
+    "name": "Học kỳ 2",
+    "order": 2
+  }
+},
+{
+  "model": "curriculum.semester",
+  "pk": 3,
+  "fields": {
+    "curriculum": 2,
+    "name": "Học kỳ 5",
+    "order": 1
+  }
+},
+{
+  "model": "curriculum.subject",
+  "pk": 1,
+  "fields": {
+    "semester": 1,
+    "code": "MH0001",
+    "name": "Đại số tuyến tính",
+    "credits": 3,
+    "theory_credits": 2,
+    "practice_credits": 1
+  }
+},
+{
+  "model": "curriculum.subject",
+  "pk": 2,
+  "fields": {
+    "semester": 1,
+    "code": "MH0002",
+    "name": "Thống kê máy tính",
+    "credits": 3,
+    "theory_credits": 2,
+    "practice_credits": 1
+  }
+},
+{
+  "model": "curriculum.subject",
+  "pk": 3,
+  "fields": {
+    "semester": 2,
+    "code": "MH0003",
+    "name": "Khai thác dữ liệu",
+    "credits": 3,
+    "theory_credits": 0,
+    "practice_credits": 0
+  }
+},
+{
+  "model": "curriculum.subject",
+  "pk": 4,
+  "fields": {
+    "semester": 1,
+    "code": "MH0005",
+    "name": "Nhập môn lập trình",
+    "credits": 3,
+    "theory_credits": 2,
+    "practice_credits": 1
+  }
+},
+{
+  "model": "curriculum.subject",
+  "pk": 5,
+  "fields": {
+    "semester": 1,
+    "code": "MH0006",
+    "name": "Kỹ thuật lập trình",
+    "credits": 3,
+    "theory_credits": 3,
+    "practice_credits": 0
+  }
+},
+{
+  "model": "curriculum.subject",
+  "pk": 6,
+  "fields": {
+    "semester": 2,
+    "code": "MH0008",
+    "name": "Lập trình hướng đối tượng",
+    "credits": 3,
+    "theory_credits": 2,
+    "practice_credits": 1
+  }
+},
+{
+  "model": "curriculum.subject",
+  "pk": 7,
+  "fields": {
+    "semester": 2,
+    "code": "MH0009",
+    "name": "Kỹ năng bàn phím",
+    "credits": 3,
+    "theory_credits": 2,
+    "practice_credits": 1
+  }
+},
+{
+  "model": "curriculum.subject",
+  "pk": 8,
+  "fields": {
+    "semester": 3,
+    "code": "MH00013",
+    "name": "Nhận dạng mẫu",
+    "credits": 3,
+    "theory_credits": 2,
+    "practice_credits": 1
+  }
+},
+{
+  "model": "registration.room",
+  "pk": 1,
+  "fields": {
+    "name": "B1.9",
+    "description": ""
+  }
+},
+{
+  "model": "registration.room",
+  "pk": 2,
+  "fields": {
+    "name": "H4.1",
+    "description": ""
+  }
+},
+{
+  "model": "registration.room",
+  "pk": 3,
+  "fields": {
+    "name": "H3.1",
+    "description": ""
+  }
+},
+{
+  "model": "registration.room",
+  "pk": 4,
+  "fields": {
+    "name": "H8.1",
+    "description": ""
+  }
+},
+{
+  "model": "registration.room",
+  "pk": 5,
+  "fields": {
+    "name": "H8.2",
+    "description": ""
+  }
+},
+{
+  "model": "registration.lecturer",
+  "pk": 1,
+  "fields": {
+    "name": "TS. Bùi Thanh Hùng",
+    "email": ""
+  }
+},
+{
+  "model": "registration.lecturer",
+  "pk": 3,
+  "fields": {
+    "name": "Vũ Đức Thịnh",
+    "email": ""
+  }
+},
+{
+  "model": "registration.lecturer",
+  "pk": 4,
+  "fields": {
+    "name": "Ths Nguyễn Hữu Tình",
+    "email": ""
+  }
+},
+{
+  "model": "registration.lecturer",
+  "pk": 5,
+  "fields": {
+    "name": "TS. Đặng Thị Phúc",
+    "email": ""
+  }
+},
+{
+  "model": "registration.classsubject",
+  "pk": 1,
+  "fields": {
+    "subject": 1,
+    "room": 1,
+    "theory_lecturer": null,
+    "practice_lecturer": null,
+    "type": "LT",
+    "practice_group": null,
+    "schedule": "10",
+    "max_students": 50
+  }
+},
+{
+  "model": "registration.classsubject",
+  "pk": 2,
+  "fields": {
+    "subject": 1,
+    "room": 1,
+    "theory_lecturer": null,
+    "practice_lecturer": null,
+    "type": "TH",
+    "practice_group": null,
+    "schedule": "10",
+    "max_students": 50
+  }
+},
+{
+  "model": "registration.classsubject",
+  "pk": 3,
+  "fields": {
+    "subject": 2,
+    "room": 2,
+    "theory_lecturer": null,
+    "practice_lecturer": null,
+    "type": "TH",
+    "practice_group": null,
+    "schedule": "20",
+    "max_students": 50
+  }
+},
+{
+  "model": "registration.registration",
+  "pk": 1,
+  "fields": {
+    "student": 2,
+    "class_subject": 1,
+    "registered_at": "2025-05-25T19:06:12.881Z"
+  }
+},
+{
+  "model": "registration.registration",
+  "pk": 5,
+  "fields": {
+    "student": 1,
+    "class_subject": 1,
+    "registered_at": "2025-05-26T01:16:00.849Z"
+  }
+},
+{
+  "model": "debt.otherfee",
+  "pk": 1,
+  "fields": {
+    "student": 2,
+    "semester": 2,
+    "name": "Bảo hiểm y tế",
+    "amount": 516000,
+    "status": "paid"
+  }
+},
+{
+  "model": "debt.otherfee",
+  "pk": 2,
+  "fields": {
+    "student": 2,
+    "semester": 1,
+    "name": "Ký túc xá",
+    "amount": 5000000,
+    "status": "unpaid"
+  }
+}
+]

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Chi tiết công nợ học phí theo học phần</h2>
+    {% for sem in semester_data %}
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <b>Đợt: {{ sem.semester }}</b>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã môn</th>
+                            <th>Tên môn học</th>
+                            <th>Số TC</th>
+                            <th>TC Lý thuyết</th>
+                            <th>TC Thực hành</th>
+                            <th>Học phí</th>
+                            <th>Ngày đăng ký</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in sem.subjects %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ row.subject.code }}</td>
+                            <td>{{ row.subject.name }}</td>
+                            <td>{{ row.credits }}</td>
+                            <td>{{ row.theory_credits }}</td>
+                            <td>{{ row.practice_credits }}</td>
+                            <td>{{ row.amount|intcomma }} VNĐ</td>
+                            <td>{{ row.registered_at|date:'d/m/Y' }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr class="table-secondary fw-bold">
+                            <td colspan="3">Tổng cộng</td>
+                            <td>{{ sem.total_credits }}</td>
+                            <td colspan="2"></td>
+                            <td>{{ sem.total_amount|intcomma }} VNĐ</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% empty %}
+        <div class="alert alert-info">Bạn chưa đăng ký học phần nào.</div>
+    {% endfor %}
+</div>
+{% endblock %} 
