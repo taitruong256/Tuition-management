@@ -2,79 +2,146 @@
 {% load humanize %}
 {% block content %}
 <div class="container mt-4">
-    <h2>Thanh toán học phí online</h2>
-    <form method="post" id="payment-form">
+    <h2 class="mb-4">Thanh toán học phí</h2>
+    <form method="post">
         {% csrf_token %}
-        <h4 class="mt-4">Các khoản học phí chưa thanh toán</h4>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Học kỳ</th>
-                    <th>TC Lý thuyết</th>
-                    <th>TC Thực hành</th>
-                    <th>Tổng tiền</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for debt in unpaid_tuition %}
-                <tr>
-                    <td>
-                        <input type="checkbox" class="fee-checkbox" name="tuition_ids" value="{{ debt.id }}" data-amount="{{ debt.total_amount }}">
-                    </td>
-                    <td>{{ debt.semester }}</td>
-                    <td>{{ debt.theory_credits }}</td>
-                    <td>{{ debt.practice_credits }}</td>
-                    <td>{{ debt.total_amount|intcomma }} VNĐ</td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="5" class="text-center">Không có công nợ học phí chưa thanh toán.</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <h4 class="mt-4">Các khoản thu khác chưa thanh toán</h4>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Học kỳ</th>
-                    <th>Tên khoản thu</th>
-                    <th>Số tiền</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for fee in unpaid_other %}
-                <tr>
-                    <td>
-                        <input type="checkbox" class="fee-checkbox" name="other_ids" value="{{ fee.id }}" data-amount="{{ fee.amount }}">
-                    </td>
-                    <td>{{ fee.semester }}</td>
-                    <td>{{ fee.name }}</td>
-                    <td>{{ fee.amount|intcomma }} VNĐ</td>
-                </tr>
-                {% empty %}
-                <tr><td colspan="4" class="text-center">Không có khoản thu nào chưa thanh toán.</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="mt-3 mb-3">
-            <b>Tổng số tiền cần thanh toán: <span id="total-amount">0</span> VNĐ</b>
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <b>Học phí chưa thanh toán</b>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã môn</th>
+                            <th>Tên môn học</th>
+                            <th>Số TC</th>
+                            <th>TC Lý thuyết</th>
+                            <th>TC Thực hành</th>
+                            <th>Học phí</th>
+                            <th>Ngày đăng ký</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in unpaid_tuition %}
+                        <tr class="tuition-row" data-id="{{ row.id }}">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ row.subject.code }}</td>
+                            <td>{{ row.subject.name }}</td>
+                            <td>{{ row.credits }}</td>
+                            <td>{{ row.theory_credits }}</td>
+                            <td>{{ row.practice_credits }}</td>
+                            <td>{{ row.amount|intcomma }} VNĐ</td>
+                            <td>{{ row.registered_at|date:'d/m/Y' }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="8" class="text-center">Không có học phí nào chưa thanh toán.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <input type="hidden" name="total_amount" id="total-amount-input" value="0">
-        <button type="submit" class="btn btn-primary">Thanh toán qua MoMo</button>
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <b>Các khoản thu khác chưa thanh toán</b>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Học kỳ</th>
+                            <th>Tên khoản thu</th>
+                            <th>Số tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fee in unpaid_other %}
+                        <tr class="other-row" data-id="{{ fee.id }}">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ fee.semester }}</td>
+                            <td>{{ fee.name }}</td>
+                            <td>{{ fee.amount|intcomma }} VNĐ</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4" class="text-center">Không có khoản thu khác nào chưa thanh toán.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <b>Tổng thanh toán</b>
+            </div>
+            <div class="card-body">
+                <p class="mb-0">Tổng số tiền: <span id="total_amount">0</span> VNĐ</p>
+                <input type="hidden" name="total_amount" id="total_amount_input" value="0">
+                <input type="hidden" name="tuition_ids" id="tuition_ids_input" value="">
+                <input type="hidden" name="other_ids" id="other_ids_input" value="">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Thanh toán</button>
     </form>
 </div>
 <script>
-    function updateTotal() {
-        let total = 0;
-        document.querySelectorAll('.fee-checkbox:checked').forEach(function(cb) {
-            total += parseInt(cb.getAttribute('data-amount'));
+    document.addEventListener('DOMContentLoaded', function() {
+        const tuitionRows = document.querySelectorAll('.tuition-row');
+        const otherRows = document.querySelectorAll('.other-row');
+        const totalAmountSpan = document.getElementById('total_amount');
+        const totalAmountInput = document.getElementById('total_amount_input');
+        const tuitionIdsInput = document.getElementById('tuition_ids_input');
+        const otherIdsInput = document.getElementById('other_ids_input');
+        let selectedTuitionIds = [];
+        let selectedOtherIds = [];
+        tuitionRows.forEach(row => {
+            row.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const index = selectedTuitionIds.indexOf(id);
+                if (index === -1) {
+                    selectedTuitionIds.push(id);
+                    this.classList.add('table-primary');
+                } else {
+                    selectedTuitionIds.splice(index, 1);
+                    this.classList.remove('table-primary');
+                }
+                updateTotalAmount();
+            });
         });
-        document.getElementById('total-amount').innerText = total.toLocaleString();
-        document.getElementById('total-amount-input').value = total;
-    }
-    document.querySelectorAll('.fee-checkbox').forEach(function(cb) {
-        cb.addEventListener('change', updateTotal);
+        otherRows.forEach(row => {
+            row.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const index = selectedOtherIds.indexOf(id);
+                if (index === -1) {
+                    selectedOtherIds.push(id);
+                    this.classList.add('table-primary');
+                } else {
+                    selectedOtherIds.splice(index, 1);
+                    this.classList.remove('table-primary');
+                }
+                updateTotalAmount();
+            });
+        });
+        function updateTotalAmount() {
+            let total = 0;
+            tuitionRows.forEach(row => {
+                if (selectedTuitionIds.includes(row.getAttribute('data-id'))) {
+                    const amount = parseInt(row.cells[6].textContent.replace(/[^0-9]/g, ''));
+                    total += amount;
+                }
+            });
+            otherRows.forEach(row => {
+                if (selectedOtherIds.includes(row.getAttribute('data-id'))) {
+                    const amount = parseInt(row.cells[3].textContent.replace(/[^0-9]/g, ''));
+                    total += amount;
+                }
+            });
+            totalAmountSpan.textContent = total.toLocaleString();
+            totalAmountInput.value = total;
+            tuitionIdsInput.value = selectedTuitionIds.join(',');
+            otherIdsInput.value = selectedOtherIds.join(',');
+        }
     });
 </script>
 {% endblock %}

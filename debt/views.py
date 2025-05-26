@@ -20,12 +20,19 @@ def update_tuition_debt_for_student(student, semester):
         for reg in regs if reg.class_subject.type == 'TH'
     )
     debt, created = TuitionDebt.objects.get_or_create(
-        student=student, semester=semester,
-        defaults={'theory_credits': theory_credits, 'practice_credits': practice_credits}
+        student=student,
+        semester=semester,
+        subject=semester,
+        defaults={
+            'theory_credits': theory_credits,
+            'practice_credits': practice_credits,
+            'status': 'unpaid',
+        }
     )
     if not created:
         debt.theory_credits = theory_credits
         debt.practice_credits = practice_credits
+        debt.status = 'unpaid'
         debt.save()
     return debt
 

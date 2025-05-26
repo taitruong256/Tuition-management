@@ -44,12 +44,18 @@ def register(request):
         if class_subject_id:
             cs = ClassSubject.objects.get(id=class_subject_id)
             if not Registration.objects.filter(student=student, class_subject=cs).exists():
-                Registration.objects.create(student=student, class_subject=cs)
-                # Sau khi đăng ký, cập nhật công nợ học phí về trạng thái chưa thanh toán
-                semester = cs.subject.semester
-                debt, created = TuitionDebt.objects.get_or_create(student=student, semester=semester)
-                debt.status = 'unpaid'
-                debt.save()
+                reg = Registration.objects.create(student=student, class_subject=cs)
+                subject = cs.subject
+                TuitionDebt.objects.get_or_create(
+                    student=student,
+                    semester=subject.semester,
+                    subject=subject,
+                    defaults={
+                        'theory_credits': subject.theory_credits,
+                        'practice_credits': subject.practice_credits,
+                        'status': 'unpaid',
+                    }
+                )
                 messages.success(request, f'Đăng ký lớp học phần {cs} thành công!')
             else:
                 messages.warning(request, 'Bạn đã đăng ký lớp học phần này rồi!')

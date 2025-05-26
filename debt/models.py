@@ -1,6 +1,6 @@
 from django.db import models
 from accounts.models import StudentUser
-from curriculum.models import Semester
+from curriculum.models import Semester, Subject
 
 class TuitionDebt(models.Model):
     STATUS_CHOICES = [
@@ -10,6 +10,7 @@ class TuitionDebt(models.Model):
     ]
     student = models.ForeignKey(StudentUser, on_delete=models.CASCADE, related_name='tuition_debts')
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name='tuition_debts')
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='tuition_debts', null=True, blank=True, verbose_name='Môn học')
     theory_credits = models.PositiveIntegerField(default=0, verbose_name='Số TC lý thuyết')
     practice_credits = models.PositiveIntegerField(default=0, verbose_name='Số TC thực hành')
     total_amount = models.PositiveBigIntegerField(default=0, verbose_name='Tổng tiền')
