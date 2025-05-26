@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'debt',
     'payment',
     'support',
+    'invoice',
 ]
 
 MIDDLEWARE = [

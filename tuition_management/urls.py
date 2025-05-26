@@ -29,5 +29,6 @@ urlpatterns = [
     path('debt/', include('debt.urls', namespace='debt')),
     path('payment/', include('payment.urls', namespace='payment')),
     path('support/', include('support.urls', namespace='support')),
+    path('invoice/', include('invoice.urls', namespace='invoice')),
     path('admin/logout/', logout_view, name='admin_logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
