@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'registration',
     'debt',
     'payment',
+    'support',
 ]
 
 MIDDLEWARE = [

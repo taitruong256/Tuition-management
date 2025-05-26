@@ -28,5 +28,6 @@ urlpatterns = [
     path('registration/', include('registration.urls', namespace='registration')),
     path('debt/', include('debt.urls', namespace='debt')),
     path('payment/', include('payment.urls', namespace='payment')),
+    path('support/', include('support.urls', namespace='support')),
     path('admin/logout/', logout_view, name='admin_logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
